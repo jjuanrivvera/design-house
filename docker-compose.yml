@@ -1,0 +1,71 @@
+version: '3.7'
+
+services:
+
+  php:
+    image: jjuanrivvera99/laravel:mysql-alpine
+    restart: always
+    depends_on:
+      - redis
+    volumes:
+      - ./:/var/www
+      - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+    networks:
+      - mysql-network
+      - app-network
+
+  nginx:
+    image: nginx:alpine
+    restart: always
+    depends_on:
+      - php
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./:/var/www
+      - ./docker/nginx/:/etc/nginx/conf.d/
+    networks:
+      - app-network
+
+  queue:
+    restart: always
+    depends_on:
+      - redis
+    image: jjuanrivvera99/laravel:mysql-alpine
+    command: sh -c "php artisan queue:work"
+    volumes:
+      - "./:/var/www/"
+    networks:
+      - app-network
+
+  node:
+    image: node:lts-alpine
+    restart: always
+    working_dir: /var/www
+    command: sh -c "tail -f /dev/null"
+    volumes:
+      - ./:/var/www
+    networks:
+      - app-network
+
+  redis:
+    image: redis
+    restart: always
+    ports:
+      - 6379:6379
+    volumes:
+      - redis-data:/data
+    networks:
+      - app-network
+
+volumes:
+
+  redis-data:
+    driver: local
+
+networks:
+  mysql-network:
+    external: true
+  app-network:
+    driver: bridge

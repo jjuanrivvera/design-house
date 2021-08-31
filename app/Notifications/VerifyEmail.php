@@ -1,0 +1,35 @@
+<?php
+
+namespace App\Notifications;
+
+use Carbon\Carbon;
+use Illuminate\Bus\Queueable;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Auth\Notifications\VerifyEmail as Notification;
+
+class VerifyEmail extends Notification
+{
+    use Queueable;
+
+    /**
+     * Get the notification's delivery channels.
+     *
+     * @param  mixed  $notifiable
+     * @return array
+     */
+    protected function verificationUrl($notifiable)
+    {
+        $appUrl = config('app.client_url');
+
+        $url = URL::temporarySignedRoute(
+            'verification.verify',
+            Carbon::now()->addMinutes(60),
+            [
+                'user' => $notifiable->id
+            ]
+        );
+
+        return str_replace(url('/api'), $appUrl, $url);
+    }
+}
