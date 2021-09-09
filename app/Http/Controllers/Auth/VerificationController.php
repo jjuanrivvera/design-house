@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
@@ -16,7 +17,7 @@ class VerificationController extends Controller
      *
      * @return void
      */
-    public function __construct(IUser $users)
+    public function __construct(User $users)
     {
         // $this->middleware('signed')->only('verify');
         $this->middleware('throttle:6,1')->only('verify', 'resend');

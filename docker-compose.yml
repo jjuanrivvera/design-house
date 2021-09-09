@@ -3,7 +3,8 @@ version: '3.7'
 services:
 
   php:
-    image: jjuanrivvera99/laravel:mysql-alpine
+    build: ./docker/php
+    image: design-house
     restart: always
     depends_on:
       - redis
@@ -32,11 +33,12 @@ services:
     restart: always
     depends_on:
       - redis
-    image: jjuanrivvera99/laravel:mysql-alpine
+    image: design-house
     command: sh -c "php artisan queue:work"
     volumes:
       - "./:/var/www/"
     networks:
+      - mysql-network
       - app-network
 
   node:

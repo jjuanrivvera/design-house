@@ -15,17 +15,23 @@ use Illuminate\Support\Facades\Route;
 */
 Route::get('me', 'User\MeController@getMe');
 
+Route::get('designs', 'Designs\DesignController@index');
+Route::get('users', 'User\UserController@index');
+
 /*
 |--------------------------------------------------------------------------
 | Authenticate users
 |--------------------------------------------------------------------------
 */
-Route::group(['middleware' => 'api'], function () {
+Route::group(['middleware' => 'auth:api'], function () {
     Route::post('logout', 'Auth\LoginController@logout')->name('logout');
     Route::put('settings/profile', 'User\SettingsController@updateProfile');
     Route::put('settings/password', 'User\SettingsController@updatePassword');
-});
 
+    Route::post('designs', 'Designs\UploadController@upload');
+    Route::put('designs/{design}', 'Designs\DesignController@update');
+    Route::delete('designs/{design}', 'Designs\DesignController@destroy');
+});
 
 /*
 |--------------------------------------------------------------------------
