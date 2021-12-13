@@ -17,12 +17,23 @@ class DesignResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'user' => new UserResource($this->user),
+            'user' => new UserResource(
+                $this->whenLoaded('user')
+            ),
             'title' => $this->title,
             'slug' => $this->slug,
             'images' => $this->images,
             'is_live' => $this->is_live,
+            'likes_count' => $this->likes()->count(),
             'description' => $this->description,
+            'comments' => CommentResource::collection(
+                $this->whenLoaded('comments')
+            ),
+            'team' => $this->team ? [
+                'id' => $this->team->id,
+                'name' => $this->team->name,
+                'slug' => $this->team->slug,
+            ] : [],
             'tag_list' => [
                 'tags' => $this->tagArray,
                 'normalized' => $this->tagArrayNormalized,

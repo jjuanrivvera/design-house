@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use App\Repositories\Contracts\UserContract;
+use App\Repositories\Eloquent\Criteria\EagerLoad;
 
 class UserController extends Controller
 {
@@ -19,7 +20,22 @@ class UserController extends Controller
 
     public function index()
     {
-        $users = $this->user->all();
+        $users = $this->user->withCriteria([
+            new EagerLoad(['designs'])
+        ])->all();
+
         return UserResource::collection($users);
+    }
+
+    public function search(Request $request)
+    {
+        $designers = $this->user->search($request);
+        return UserResource::collection($designers);
+    }
+
+    public function findByUsername($username)
+    {
+        $user = $this->user->findWhereFirst('username', $username);
+        return new UserResource($user);
     }
 }
