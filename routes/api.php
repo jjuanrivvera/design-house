@@ -5,32 +5,6 @@ use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
-|
-*/
-Route::get('me', 'User\MeController@getMe');
-
-Route::get('designs', 'Designs\DesignController@index');
-Route::get('designs/{id}', 'Designs\DesignController@show');
-Route::get('designs/slug/{slug}', 'Designs\DesignController@findBySlug');
-
-Route::get('teams/slug/{slug}', 'Teams\TeamController@findBySlug');
-Route::get('teams/{id}/designs', 'Designs\DesignController@getForTeam');
-
-Route::get('users', 'User\UserController@index');
-Route::get('users/{username}', 'User\UserController@findByUsername');
-Route::get('users/{id}/designs', 'Designs\DesignController@getForUser');
-
-Route::get('search/designs', 'Designs\DesignController@search');
-Route::get('search/designers', 'User\UserController@search');
-
-/*
-|--------------------------------------------------------------------------
 | Authenticate users
 |--------------------------------------------------------------------------
 */
@@ -71,6 +45,33 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::put('chats/{id}/markAsRead', 'Chats\ChatController@markAsRead');
     Route::delete('messages/{id}', 'Chats\ChatController@destroyMessage');
 });
+
+/*
+|--------------------------------------------------------------------------
+| API Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register API routes for your application. These
+| routes are loaded by the RouteServiceProvider within a group which
+| is assigned the "api" middleware group. Enjoy building your API!
+|
+*/
+Route::get('me', 'User\MeController@getMe');
+
+Route::get('designs', 'Designs\DesignController@index');
+Route::get('designs/{id}', 'Designs\DesignController@show');
+Route::get('designs/slug/{slug}', 'Designs\DesignController@findBySlug');
+
+Route::get('teams/slug/{slug}', 'Teams\TeamController@findBySlug');
+Route::get('teams/{id}/designs', 'Designs\DesignController@getForTeam');
+
+Route::get('users', 'User\UserController@index');
+Route::get('users/{username}', 'User\UserController@findByUsername');
+Route::get('users/{id}/designs', 'Designs\DesignController@getForUser');
+
+Route::get('search/designs', 'Designs\DesignController@search');
+Route::get('search/designers', 'User\UserController@search');
+
 
 /*
 |--------------------------------------------------------------------------

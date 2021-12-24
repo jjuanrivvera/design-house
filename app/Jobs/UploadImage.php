@@ -76,8 +76,8 @@ class UploadImage implements ShouldQueue
                 File::delete($thumbnail);
             };
 
-            $design->upload_successful = true;
-            $design->save();
+            $this->design->upload_successful = true;
+            $this->design->save();
         } catch (\Throwable $th) {
             \Log::error($th->getMessage());
         }

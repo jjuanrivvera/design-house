@@ -1,5 +1,5 @@
 <?php
 
 return [
-    'upload_disk' => 's3' // 'public' or 's3'
+    'upload_disk' => 'public' // 'public' or 's3'
 ];
