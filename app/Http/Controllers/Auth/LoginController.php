@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
@@ -67,9 +68,9 @@ class LoginController extends Controller
         if ($user instanceof MustVerifyEmail && !$user->hasVerifiedEmail()) {
             return response()->json([
                 'errors' => [
-                    'verification' => 'You need to verify your email account'
+                    'message' => 'You need to verify your email account'
                 ]
-            ]);
+            ], 422);
         }
 
         throw ValidationException::withMessages([
