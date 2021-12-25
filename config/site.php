@@ -1,5 +1,5 @@
 <?php
 
 return [
-    'upload_disk' => 'public' // 'public' or 's3'
+    'upload_disk' => env('APP_UPLOAD_DISK', 'public') // 'public' or 's3'
 ];
