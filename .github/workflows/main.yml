@@ -57,4 +57,4 @@ jobs:
           git pull origin master
           docker-compose exec -T php sh -c "composer install --no-ansi --no-dev --no-interaction --no-plugins --no-progress --no-scripts --optimize-autoloader"
           docker-compose down
-          docker-compose up -d --remome-orphans
+          docker-compose up --remove-orphans -d
