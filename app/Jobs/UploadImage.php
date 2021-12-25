@@ -22,6 +22,27 @@ class UploadImage implements ShouldQueue
     protected $design;
 
     /**
+     * The number of times the job may be attempted.
+     *
+     * @var int
+     */
+    public $tries = 3;
+
+    /**
+     * The number of seconds to wait before retrying the job.
+     *
+     * @var int
+     */
+    public $retryAfter = 5;
+
+    /**
+     * Delete the job if its models no longer exist.
+     *
+     * @var bool
+     */
+    public $deleteWhenMissingModels = true;
+
+    /**
      * Create a new job instance.
      *
      * @return void
@@ -42,44 +63,52 @@ class UploadImage implements ShouldQueue
         $fileName = $this->design->image;
         $original_file = storage_path() . '/uploads/original/' . $fileName;
 
-        try {
-            $image = Image::make($original_file)
-                ->fit(800, 600, function ($constraint) {
-                    $constraint->aspectRatio();
-                })
-                ->save($large = storage_path() . '/uploads/large/' . $fileName);
 
-            $image = Image::make($original_file)
-                ->fit(250, 200, function ($constraint) {
-                    $constraint->aspectRatio();
-                })
-                ->save($thumbnail = storage_path() . '/uploads/thumbnail/' . $fileName);
+        $image = Image::make($original_file)
+            ->fit(800, 600, function ($constraint) {
+                $constraint->aspectRatio();
+            })
+            ->save($large = storage_path() . '/uploads/large/' . $fileName);
 
-            $originalFile = Storage::disk($disk)
-                ->put('/uploads/designs/original/' . $fileName, fopen($original_file, 'r+'));
+        $image = Image::make($original_file)
+            ->fit(250, 200, function ($constraint) {
+                $constraint->aspectRatio();
+            })
+            ->save($thumbnail = storage_path() . '/uploads/thumbnail/' . $fileName);
 
-            if ($originalFile) {
-                File::delete($original_file);
-            };
+        $originalFile = Storage::disk($disk)
+            ->put('/uploads/designs/original/' . $fileName, fopen($original_file, 'r+'));
 
-            $largeFile = Storage::disk($disk)
-                ->put('/uploads/designs/large/' . $fileName, fopen($large, 'r+'));
+        if ($originalFile) {
+            File::delete($original_file);
+        };
 
-            if ($largeFile) {
-                File::delete($large);
-            };
+        $largeFile = Storage::disk($disk)
+            ->put('/uploads/designs/large/' . $fileName, fopen($large, 'r+'));
 
-            $thumbnailFile = Storage::disk($disk)
-                ->put('/uploads/designs/thumbnail/' . $fileName, fopen($thumbnail, 'r+'));
+        if ($largeFile) {
+            File::delete($large);
+        };
 
-            if ($thumbnailFile) {
-                File::delete($thumbnail);
-            };
+        $thumbnailFile = Storage::disk($disk)
+            ->put('/uploads/designs/thumbnail/' . $fileName, fopen($thumbnail, 'r+'));
 
-            $this->design->upload_successful = true;
-            $this->design->save();
-        } catch (\Throwable $th) {
-            \Log::error($th->getMessage());
-        }
+        if ($thumbnailFile) {
+            File::delete($thumbnail);
+        };
+
+        $this->design->upload_successful = true;
+        $this->design->save();
+    }
+
+    /**
+     * Handle a job failure.
+     *
+     * @param \Throwable $exception
+     */
+    public function failed(Throwable $exception): void
+    {
+        $this->design->upload_successful = false;
+        $this->design->save();
     }
 }
