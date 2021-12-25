@@ -5,6 +5,7 @@ namespace App\Jobs;
 use File;
 use Image;
 use Storage;
+use Throwable;
 use App\Models\Design;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
