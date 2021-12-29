@@ -34,5 +34,8 @@ RUN echo "error_reporting = E_ALL" >> /usr/local/etc/php/conf.d/docker-php-ext-x
     && echo "xdebug.connect_timeout_ms=300" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
     && cat /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 
+RUN cp /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini && \
+    sed -i -e "s/^ *memory_limit.*/memory_limit = 4G/g" -e "s/^ *max_execution_time.*/max_execution_time = 0/g" /usr/local/etc/php/php.ini
+
 # Expose port 9000 and start php-fpm server
 EXPOSE 9000
