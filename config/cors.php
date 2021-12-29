@@ -19,7 +19,8 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['*.jjuanrivvera.com'],
+    // 'allowed_origins' => ['*.jjuanrivvera.com', '*.local'],
+    'allowed_origins' => ['*'],
 
     'allowed_origins_patterns' => [],
 
