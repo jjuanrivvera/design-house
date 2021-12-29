@@ -60,6 +60,7 @@ class UploadImage implements ShouldQueue
      */
     public function handle()
     {
+        \Log::info('Job started');
         $disk = $this->design->disk;
         $fileName = $this->design->image;
         $original_file = storage_path() . '/uploads/original/' . $fileName;
@@ -97,6 +98,8 @@ class UploadImage implements ShouldQueue
         if ($thumbnailFile) {
             File::delete($thumbnail);
         };
+
+        \Log::info('Images processed');
 
         $this->design->upload_successful = true;
         $this->design->save();
