@@ -65,6 +65,7 @@ class UploadImage implements ShouldQueue
         $fileName = $this->design->image;
         $original_file = storage_path() . '/uploads/original/' . $fileName;
 
+        \Log::info('Original file: ' . $original_file);
 
         $image = Image::make($original_file)
             ->fit(800, 600, function ($constraint) {
