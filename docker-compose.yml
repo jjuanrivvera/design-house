@@ -41,6 +41,7 @@ services:
     command: sh -c "php artisan queue:work"
     volumes:
       - "./:/var/www/"
+      - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
     networks:
       - mysql-network
       - app-network
