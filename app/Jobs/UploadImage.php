@@ -73,11 +73,15 @@ class UploadImage implements ShouldQueue
             })
             ->save($large = storage_path() . '/uploads/large/' . $fileName);
 
+        \Log::info('Large file: ' . $large);
+
         $image = Image::make($original_file)
             ->fit(250, 200, function ($constraint) {
                 $constraint->aspectRatio();
             })
             ->save($thumbnail = storage_path() . '/uploads/thumbnail/' . $fileName);
+
+        \Log::info('Thumbnail file: ' . $thumbnail);
 
         $originalFile = Storage::disk($disk)
             ->put('/uploads/designs/original/' . $fileName, fopen($original_file, 'r+'));
