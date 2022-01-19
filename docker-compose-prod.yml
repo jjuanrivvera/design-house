@@ -36,7 +36,7 @@ services:
     restart: always
     depends_on:
       - redis
-    image: design-house
+    image: design-house:prod
     command: sh -c "php artisan queue:work > /dev/null 2>&1"
     volumes:
       - "./:/var/www/"
