@@ -38,11 +38,10 @@ services:
     depends_on:
       - redis
     image: design-house
-    # command: sh -c "php artisan queue:work > /dev/null 2>&1"
     command: sh -c "php artisan queue:work > /dev/null"
     volumes:
       - "./:/var/www/"
-      # - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+      - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
     networks:
       - mysql-network
       - app-network
