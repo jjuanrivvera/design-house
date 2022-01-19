@@ -1,4 +1,4 @@
-version: '3.7'
+version: '3.3'
 
 services:
 
@@ -38,7 +38,7 @@ services:
     depends_on:
       - redis
     image: design-house
-    command: sh -c "php artisan queue:work"
+    command: sh -c "php artisan queue:work > /dev/null 2>&1"
     volumes:
       - "./:/var/www/"
       # - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini

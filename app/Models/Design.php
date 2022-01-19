@@ -21,7 +21,8 @@ class Design extends Model
         'close_to_comment',
         'is_live',
         'upload_successful',
-        'disk'
+        'disk',
+        'team_id'
     ];
 
     public function user()
