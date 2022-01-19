@@ -5,7 +5,7 @@ services:
   php:
     build:
       context: ./docker/php
-      dockerfile: ./docker/php/DockerfileProd
+      dockerfile: DockerfileProd
     image: design-house:prod
     restart: always
     depends_on:
